@@ -1,0 +1,10 @@
+yfinance==0.2.28
+pandas
+numpy
+statsmodels
+scikit-learn
+xgboost
+shap
+streamlit
+plotly
+pyarrow
