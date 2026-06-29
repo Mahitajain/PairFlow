@@ -8,8 +8,6 @@ import plotly.graph_objects as go
 import plotly.express as px
 import pickle
 import sys
-import os
-sys.path.append("../src")
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 SRC_DIR  = os.path.join(BASE_DIR, "src")
@@ -49,23 +47,6 @@ st.set_page_config(
     layout="wide"
 )
 
-# ── load data ────────────────────────────────────────────
-@st.cache_data
-def load_data():
-    prices = pd.read_parquet("../data/prices_large.parquet")
-    ml_ranked = pd.read_csv("../data/ml_large_ranked.csv")
-    return prices, ml_ranked
-
-@st.cache_resource
-def load_models():
-    with open("../data/xgb_large.pkl", "rb") as f:
-        xgb = pickle.load(f)
-    with open("../data/scaler_large.pkl", "rb") as f:
-        scaler = pickle.load(f)
-    return xgb, scaler
-
-prices, ml_ranked = load_data()
-xgb_model, scaler = load_models()
 
 # ── sidebar ───────────────────────────────────────────────
 st.sidebar.title("PairFlow")
