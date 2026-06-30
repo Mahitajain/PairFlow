@@ -1,175 +1,468 @@
-# PairFlow — Dynamic Statistical Arbitrage
+# PairFlow 📈
+### ML-Enhanced Dynamic Statistical Arbitrage using Cointegration & XGBoost
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://pairflow-8mltvonck9hbe4ufxrxhnm.streamlit.app/)
-![Python](https://img.shields.io/badge/Python-3.10+-blue)
-![License](https://img.shields.io/badge/License-MIT-green)
+[![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)]()
+[![Streamlit](https://img.shields.io/badge/Streamlit-Deployed-red)](https://pairflow-8mltvonck9hbe4ufxrxhnm.streamlit.app/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)]()
 
-> ML-enhanced pairs trading system that dynamically identifies 
-> cointegrated stock pairs and ranks them using XGBoost — 
-> achieving **46× improvement in top-10 pair selection performance** in pair selection quality 
-> over statistical baselines.
-
-## Live Demo
-**[Launch Dashboard →](https://pairflow-8mltvonck9hbe4ufxrxhnm.streamlit.app/)**
-
-![Dashboard Preview](assets/dashboard_preview.gif)
+> An end-to-end quantitative trading system that dynamically discovers, ranks, and backtests statistically arbitrageable stock pairs using classical statistical methods and Machine Learning.
 
 ---
 
-## Results
+# Live Demo
 
-| Ranking Method | Top-10 Avg Sharpe | vs Baseline |
-|---------------|-------------------|-------------|
-| P-value Baseline | 0.015 | — |
-| Hurst Exponent | 0.185 | +0.170 |
-| Random Forest | 0.674 | +0.659 |
-| **XGBoost** | **0.693** | **+0.678** |
+🚀 **Streamlit Dashboard**
 
-**Best pair identified:** CRM/META (Predicted Sharpe: 1.657, Actual Sharpe: 1.683)
+https://pairflow-8mltvonck9hbe4ufxrxhnm.streamlit.app/
 
 ---
 
-## Project Overview
+# Dashboard Preview
 
-PairFlow is an end-to-end quantitative trading system built 
-from scratch. It combines classical statistical arbitrage 
-methodology with machine learning to dynamically identify 
-and rank tradeable stock pairs.
-
-### The Problem
-Traditional pair trading uses fixed pairs and ranks them 
-purely by cointegration p-value. This ignores multiple 
-dimensions of pair quality and fails when market 
-relationships change.
-
-### The Solution
-PairFlow dynamically re-selects pairs using a rolling 
-12-month window and ranks them using XGBoost trained on 
-11 engineered features — achieving 46x better pair 
-selection than p-value ranking.
+<p align="center">
+<img src="assets/dashboard_preview.gif" width="95%">
+</p>
 
 ---
 
-## Pipeline Architecture
+# Project Overview
+
+PairFlow is a complete quantitative research pipeline that automates the discovery of profitable statistical arbitrage opportunities.
+
+Unlike traditional pair trading systems that rely only on cointegration p-values and static stock pairs, PairFlow dynamically:
+
+- selects candidate pairs every month
+- engineers statistical and temporal features
+- predicts future trading quality using XGBoost
+- validates results using walk-forward backtesting
+- visualizes trades through an interactive dashboard
+
+The project combines statistics, quantitative finance, machine learning, and software engineering into one end-to-end workflow.
+
+---
+
+# Problem Statement
+
+Traditional statistical arbitrage strategies suffer from three major limitations:
+
+- Static stock pairs become outdated as market relationships evolve.
+- Cointegration p-values alone fail to capture overall pair quality.
+- Most academic implementations ignore realistic transaction costs and walk-forward validation.
+
+The objective of PairFlow is to build a dynamic pair selection system that adapts to changing market conditions and ranks candidate pairs using Machine Learning.
+
+---
+
+# Solution Overview
+
+PairFlow introduces an ML-based ranking layer on top of traditional statistical arbitrage.
+
+Instead of choosing the pair with the smallest cointegration p-value, the system learns which statistical characteristics historically produce higher future Sharpe Ratios.
+
+---
+
+# Pipeline Architecture
 
 ```
-Raw Prices (110 S&P 500 stocks, 6 years, 6 sectors)
-         ↓
-Sector-based pair filtering
-(978 candidates → 91 fast filter → 23 cointegrated)
-         ↓
-Feature Engineering (11 features per pair)
-- Statistical: cointegration p-value, correlation, ADF
-- Spread: volatility, skewness, kurtosis, mean crossings
-- Temporal: half-life, Hurst exponent, beta stability
-         ↓
-XGBoost Regressor (predicts out-of-sample Sharpe)
-         ↓
-Z-score signal generation (entry ±2σ, exit ±0.5σ)
-         ↓
-Backtesting with transaction costs
-(Sharpe, drawdown, win rate, P&L)
+Historical Stock Prices
+          │
+          ▼
+Data Cleaning
+          │
+          ▼
+Sector-wise Candidate Filtering
+978 pairs → 91 pairs
+          │
+          ▼
+Parallel Cointegration Testing
+91 → 23 tradable pairs
+          │
+          ▼
+Feature Engineering
+11 statistical features
+          │
+          ▼
+XGBoost Regressor
+Predict Future Sharpe Ratio
+          │
+          ▼
+Rank Candidate Pairs
+          │
+          ▼
+Trading Signal Generation
+Z-score Strategy
+          │
+          ▼
+Backtesting
+Sharpe | Drawdown | Win Rate | PnL
+          │
+          ▼
+Interactive Streamlit Dashboard
 ```
 
 ---
 
-## Key Features
+# Dataset
 
-- **Dynamic pair selection** — rolling 12-month formation 
-  windows, pairs updated monthly
-- **Sector-based filtering** — 978 → 91 candidates using 
-  correlation + log-ratio ADF pre-filter
-- **Parallel cointegration testing** — multiprocessing.Pool 
-  across all CPU cores, 91 pairs in 6.3 seconds
-- **11 engineered features** — statistical + spread + 
-  temporal characteristics per pair
-- **XGBoost pair ranking** — 46x improvement over p-value 
-  baseline on out-of-sample data
-- **SHAP explainability** — feature attribution for every 
-  prediction
-- **Walk-forward validation** — no look-ahead bias, 
-  train 2018–2021, test 2022–2023
-- **Live Streamlit dashboard** — interactive pair analysis, 
-  z-score charts, cumulative P&L
+| Property | Value |
+|-----------|-------|
+| Stocks | 110 S&P 500 companies |
+| Sectors | 6 |
+| Time Period | 2018–2023 |
+| Frequency | Daily |
+| Source | Yahoo Finance |
 
 ---
 
-## Tech Stack
+# Methodology
 
-| Component | Technology |
-|-----------|------------|
-| Programming Language | Python |
-| Data Collection | yfinance |
-| Data Storage | Parquet |
-| Data Processing | pandas, NumPy |
-| Statistical Analysis | statsmodels (ADF, Engle-Granger, OLS) |
-| Machine Learning | scikit-learn, XGBoost |
-| Model Explainability | SHAP |
+## 1. Data Collection
+
+Historical adjusted closing prices are downloaded using **Yahoo Finance**.
+
+---
+
+## 2. Candidate Pair Generation
+
+To reduce computational cost:
+
+- only stocks from the same sector are compared
+- highly correlated pairs are retained
+- log-ratio stationarity filter removes weak candidates
+
+```
+978 candidate pairs
+
+↓
+
+91 filtered pairs
+```
+
+---
+
+## 3. Cointegration Testing
+
+Engle-Granger Two-Step Method
+
+- OLS Regression
+- ADF Test on residuals
+- Cointegration p-value
+
+Only statistically cointegrated pairs proceed.
+
+```
+91
+
+↓
+
+23 cointegrated pairs
+```
+
+---
+
+## 4. Feature Engineering
+
+Each pair is represented using **11 engineered features**.
+
+### Statistical
+
+- Cointegration p-value
+- Correlation
+- ADF Statistic
+
+### Spread Behaviour
+
+- Spread volatility
+- Spread skewness
+- Spread kurtosis
+- Mean crossings
+
+### Temporal Features
+
+- Half-life
+- Hurst Exponent
+- Beta Stability
+- Rolling volatility
+
+---
+
+## 5. Machine Learning
+
+Model:
+
+- XGBoost Regressor
+
+Target:
+
+Future out-of-sample Sharpe Ratio
+
+Validation:
+
+Walk-forward validation
+
+Training:
+
+2018–2021
+
+Testing:
+
+2022–2023
+
+---
+
+## 6. Trading Strategy
+
+Spread:
+
+```
+Spread = Stock_A − β × Stock_B
+```
+
+Trading Rules
+
+| Signal | Action |
+|---------|---------|
+| Z > +2 | Short Spread |
+| Z < -2 | Long Spread |
+| Exit ±0.5 | Close Position |
+
+Transaction costs are included during backtesting.
+
+---
+
+# Results
+
+| Ranking Method | Average Top-10 Sharpe |
+|---------------|-----------------------:|
+| P-value Baseline | 0.015 |
+| Hurst Ranking | 0.185 |
+| Random Forest | 0.674 |
+| **XGBoost** | **0.693** |
+
+## Improvement
+
+✅ **46× better top-10 pair selection quality**
+
+Best Pair
+
+```
+CRM / META
+
+Predicted Sharpe : 1.657
+
+Actual Sharpe : 1.683
+```
+
+---
+
+# Explainability
+
+SHAP values are used to explain every XGBoost prediction.
+
+Feature importance analysis identifies which statistical characteristics contribute most toward profitable pairs.
+
+---
+
+# Dashboard Features
+
+The Streamlit dashboard provides:
+
+- Pair Ranking
+- Interactive Price Charts
+- Spread Visualization
+- Z-score Signals
+- Cumulative PnL
+- Model Predictions
+- SHAP Feature Importance
+
+---
+
+# Tech Stack
+
+| Category | Technology |
+|------------|----------------------|
+| Language | Python |
+| Data | yfinance |
+| Storage | Parquet |
+| Processing | Pandas, NumPy |
+| Statistics | statsmodels |
+| Machine Learning | Scikit-learn, XGBoost |
+| Explainability | SHAP |
 | Visualization | Plotly, Matplotlib |
 | Dashboard | Streamlit |
-| Deployment | Streamlit Cloud |
 | Parallel Computing | multiprocessing |
+| Deployment | Streamlit Cloud |
 | Version Control | Git, GitHub |
 
 ---
 
-## Installation
-
-```bash
-git clone https://github.com/Mahitajain/PairFlow.git
-cd pairflow
-pip install -r requirements.txt
-```
-
-**Download data and run pipeline:**
-```bash
-pip install -r requirements.txt
-
-streamlit run app/dashboard.py
-```
-
----
-
-## Project Structure
+# Project Structure
 
 ```
-pairflow/
+PairFlow/
+
+│
+
 ├── app/
-│   └── dashboard.py       # Streamlit dashboard
-├── data/                  # Generated data files
-├── notebooks/             # Day-by-day development
-│   ├── day1_data.ipynb
-│   ├── ...
-│   └── june11_scaling.ipynb
+│ └── dashboard.py
+│
+├── assets/
+│ └── dashboard_preview.gif
+│
+├── configs/
+│ └── config.yaml
+│
+├── data/
+│ ├── raw/
+│ ├── processed/
+│ └── models/
+│
+├── notebooks/
+│
 ├── src/
-│   └── data_loader.py     # Core pipeline functions
+│ ├── data_loader.py
+│ ├── preprocessing.py
+│ ├── feature_engineering.py
+│ ├── cointegration.py
+│ ├── backtester.py
+│ ├── train_model.py
+│ └── utils.py
+│
+├── tests/
+│
 ├── requirements.txt
+│
 └── README.md
 ```
 
 ---
 
-## Concepts Used
+# Installation
 
-**Statistics:** Cointegration, ADF stationarity test, 
-OLS regression, Engle-Granger two-step method, 
-z-score, rolling windows
+Clone the repository
 
-**Finance:** Pairs trading, mean reversion, hedge ratio, 
-spread construction, P&L calculation, Sharpe ratio, 
-maximum drawdown
+```bash
+git clone https://github.com/Mahitajain/PairFlow.git
+```
 
-**ML:** Feature engineering, Random Forest, XGBoost, 
-SHAP values, walk-forward validation, 
-cross-validation
+Move into project
+
+```bash
+cd PairFlow
+```
+
+Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the dashboard
+
+```bash
+streamlit run app/dashboard.py
+```
 
 ---
 
-## Author
+# Engineering Highlights
 
-**Mahita Jain** — Computer Science Engineering Student | Machine Learning & Quantitative Finance Enthusiast 
-[LinkedIn](https://www.linkedin.com/in/mahita-jain-b276392b1/) | [GitHub](https://github.com/Mahitajain)
+- Modular pipeline
+- Walk-forward validation
+- Parallel cointegration testing
+- SHAP explainability
+- Out-of-sample evaluation
+- Transaction-cost-aware backtesting
+- Interactive deployment
 
 ---
 
-*Built to demonstrate end-to-end quantitative finance, statistical arbitrage, machine learning, and interactive dashboard development.*
+# Assumptions
+
+- Daily closing prices are sufficient for pair discovery.
+- Market impact is ignored.
+- Fixed transaction cost model.
+- Unlimited liquidity is assumed.
+- Orders execute at closing prices.
+
+---
+
+# Limitations
+
+Current implementation does not include:
+
+- Live market execution
+- Intraday trading
+- Dynamic position sizing
+- Portfolio optimization
+- Risk parity allocation
+- Stop-loss optimization
+- Reinforcement learning
+
+---
+
+# Future Improvements
+
+- Docker deployment
+- MLflow experiment tracking
+- CI/CD with GitHub Actions
+- Automated monthly retraining
+- Portfolio optimization
+- Multi-factor ranking model
+- Live Alpaca/Interactive Brokers execution
+- LSTM/Transformer comparison
+- Bayesian Hyperparameter Optimization
+
+---
+
+# Key Concepts
+
+### Statistics
+
+- Cointegration
+- ADF Test
+- OLS Regression
+- Z-score
+- Rolling Windows
+
+### Finance
+
+- Statistical Arbitrage
+- Mean Reversion
+- Hedge Ratio
+- Sharpe Ratio
+- Maximum Drawdown
+
+### Machine Learning
+
+- Feature Engineering
+- XGBoost
+- SHAP
+- Walk-forward Validation
+
+---
+
+# Author
+
+**Mahita Jain**
+
+Computer Science Engineering Student
+
+Interested in
+
+- Machine Learning
+- Quantitative Finance
+- Data Science
+- Algorithmic Trading
+
+LinkedIn
+
+https://www.linkedin.com/in/mahita-jain-b276392b1/
+
+GitHub
+
+https://github.com/Mahitajain
+
+---
+
+If you found this project interesting, feel free to ⭐ the repository.
