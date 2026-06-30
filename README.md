@@ -1,16 +1,16 @@
 # PairFlow — Dynamic Statistical Arbitrage
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](YOUR_STREAMLIT_URL)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://pairflow-8mltvonck9hbe4ufxrxhnm.streamlit.app/)
 ![Python](https://img.shields.io/badge/Python-3.10+-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 > ML-enhanced pairs trading system that dynamically identifies 
 > cointegrated stock pairs and ranks them using XGBoost — 
-> achieving **46x improvement** in pair selection quality 
+> achieving **46× improvement in top-10 pair selection performance** in pair selection quality 
 > over statistical baselines.
 
 ## Live Demo
-**[Launch Dashboard →](YOUR_STREAMLIT_URL)**
+**[Launch Dashboard →](https://pairflow-8mltvonck9hbe4ufxrxhnm.streamlit.app/)**
 
 ![Dashboard Preview](assets/dashboard_preview.gif)
 
@@ -25,8 +25,7 @@
 | Random Forest | 0.674 | +0.659 |
 | **XGBoost** | **0.693** | **+0.678** |
 
-**Best pair identified:** CRM/META — Predicted Sharpe 1.657, 
-Actual 1.683
+**Best pair identified:** CRM/META (Predicted Sharpe: 1.657, Actual Sharpe: 1.683)
 
 ---
 
@@ -98,29 +97,34 @@ Backtesting with transaction costs
 ## Tech Stack
 
 | Component | Technology |
-|-----------|-----------|
-| Data collection | yfinance |
-| Data processing | pandas, NumPy |
-| Statistical tests | statsmodels (ADF, Engle-Granger, OLS) |
+|-----------|------------|
+| Programming Language | Python |
+| Data Collection | yfinance |
+| Data Storage | Parquet |
+| Data Processing | pandas, NumPy |
+| Statistical Analysis | statsmodels (ADF, Engle-Granger, OLS) |
 | Machine Learning | scikit-learn, XGBoost |
-| Explainability | SHAP |
-| Visualisation | matplotlib, Plotly |
+| Model Explainability | SHAP |
+| Visualization | Plotly, Matplotlib |
 | Dashboard | Streamlit |
-| Parallelisation | multiprocessing |
+| Deployment | Streamlit Cloud |
+| Parallel Computing | multiprocessing |
+| Version Control | Git, GitHub |
 
 ---
 
 ## Installation
 
 ```bash
-git clone https://github.com/Mahitajain/PairFlow
+git clone https://github.com/Mahitajain/PairFlow.git
 cd pairflow
 pip install -r requirements.txt
 ```
 
 **Download data and run pipeline:**
 ```bash
-python src/data_loader.py
+pip install -r requirements.txt
+
 streamlit run app/dashboard.py
 ```
 
@@ -163,10 +167,9 @@ cross-validation
 
 ## Author
 
-**Mahita Jain** — Final Year Engineering Student  
+**Mahita Jain** — Computer Science Engineering Student | Machine Learning & Quantitative Finance Enthusiast 
 [LinkedIn](https://www.linkedin.com/in/mahita-jain-b276392b1/) | [GitHub](https://github.com/Mahitajain)
 
 ---
 
-*Built as a placement project demonstrating end-to-end 
-quantitative finance + ML engineering skills.*
+*Built to demonstrate end-to-end quantitative finance, statistical arbitrage, machine learning, and interactive dashboard development.*
