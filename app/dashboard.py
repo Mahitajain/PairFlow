@@ -33,7 +33,9 @@ def load_models():
     return xgb, scaler
 
 
-
+# Load datasets and models
+prices, ml_ranked = load_data()
+xgb_model, scaler = load_models()
 
 from data_loader import (load_prices, compute_hedge_ratio,
                           compute_spread, compute_zscore,
