@@ -1,4 +1,4 @@
-# PairFlow 📈
+# PairFlow 
 ### ML-Enhanced Dynamic Statistical Arbitrage using Cointegration & XGBoost
 
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)]()
@@ -11,17 +11,9 @@
 
 # Live Demo
 
-🚀 **Streamlit Dashboard**
+ **Streamlit Dashboard**
 
 https://pairflow-8mltvonck9hbe4ufxrxhnm.streamlit.app/
-
----
-
-# Dashboard Preview
-
-<p align="center">
-<img src="assets/dashboard_preview.gif" width="95%">
-</p>
 
 ---
 
@@ -241,7 +233,7 @@ Transaction costs are included during backtesting.
 
 ## Improvement
 
-✅ **46× better top-10 pair selection quality**
+ **46× better top-10 pair selection quality**
 
 Best Pair
 
@@ -403,15 +395,11 @@ Current implementation does not include:
 
 # Future Improvements
 
-- Docker deployment
 - MLflow experiment tracking
 - CI/CD with GitHub Actions
 - Automated monthly retraining
 - Portfolio optimization
 - Multi-factor ranking model
-- Live Alpaca/Interactive Brokers execution
-- LSTM/Transformer comparison
-- Bayesian Hyperparameter Optimization
 
 ---
 
